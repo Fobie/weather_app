@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:weather_app/const/colors.dart';
+import 'package:weather_app/const/dimens.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/service/weather_service.dart';
 
@@ -94,16 +95,37 @@ class _WeatherPageState extends State<WeatherPage> {
               Text(
                   _weather?.cityName ?? "loading city",
                   style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 40
+                    color: kWhiteColor,
+                    fontSize: kFontSize40x,
                   ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15),
+                padding: const EdgeInsets.symmetric(vertical: kSP15x),
                 child: Lottie.asset(getWeatherAnimation(_weather?.mainCondition)),
               ),
-              Text('${_weather?.temperature.round()}°C'),
-              Text(_weather?.mainCondition ?? '')
+              RichText(
+                  text: TextSpan(
+                    text: '${_weather?.temperature.round()}',
+                    style: TextStyle(
+                      fontSize: kFontSize20x
+                    ),
+                    children: const<TextSpan>[
+                      TextSpan(
+                        text: '°C',
+                        style: TextStyle(
+                          color: kSunnyColor
+                        )
+                      )
+                    ]
+                  ),
+
+              ),
+              Text(
+                _weather?.mainCondition ?? '',
+                style: TextStyle(
+                  color: kWhiteColor,
+                  fontSize: kFontSize30x,
+              ),  )
             ],
           ),
         ),
