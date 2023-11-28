@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:weather_app/const/colors.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/service/weather_service.dart';
 
@@ -27,6 +29,54 @@ class _WeatherPageState extends State<WeatherPage> {
     }
   }
 
+  String getWeatherAnimation(String? mainCondition){
+    if(mainCondition == null) return 'assets/sunny.json';
+
+    switch(mainCondition.toLowerCase()){
+      case 'clouds':
+      case 'mist':
+      case 'smoke':
+      case 'dust':
+      case 'fog':
+      case 'haze':
+          return 'assets/cloudy.json';
+      case 'rain':
+      case 'drizzle':
+      case 'shower rain':
+          return 'assets/partly-shower.json';
+      case 'thunderstorm':
+          return 'assets/storm.json';
+      case 'clear':
+          return 'assets/sunny.json';
+      default:
+          return 'assets/sunny.json';
+    }
+  }
+
+  Color getWeatherBackground(String? mainCondition){
+    if(mainCondition == null) return kWhiteColor;
+
+    switch(mainCondition.toLowerCase()){
+      case 'clouds':
+      case 'mist':
+      case 'smoke':
+      case 'dust':
+      case 'fog':
+      case 'haze':
+          return kCloudyColor;
+      case 'rain':
+      case 'drizzle':
+      case 'shower rain':
+          return kPartlyShowerColor;
+      case 'thunderstorm':
+          return kStormColor;
+      case 'clear':
+          return kSunnyColor;
+      default:
+          return kSunnyColor;
+    }
+  }
+
   @override
   void initState() {
     _fetchWeather();
@@ -36,12 +86,24 @@ class _WeatherPageState extends State<WeatherPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: getWeatherBackground(_weather?.mainCondition),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(_weather?.cityName ?? "loading city"),
-              Text('${_weather?.temperature.round()}C')
+              Text(
+                  _weather?.cityName ?? "loading city",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 40
+                  ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                child: Lottie.asset(getWeatherAnimation(_weather?.mainCondition)),
+              ),
+              Text('${_weather?.temperature.round()}°C'),
+              Text(_weather?.mainCondition ?? '')
             ],
           ),
         ),
